@@ -8,7 +8,7 @@ defmodule Tzdata.Mixfile do
       app: :tzdata,
       name: "tzdata",
       version: @version,
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       package: package(),
       description: description(),
       deps: deps(),
@@ -27,7 +27,7 @@ defmodule Tzdata.Mixfile do
 
   defp deps do
     [
-      {:req, ">= 0.5.10 and < 1.0.0"},
+      {:req, ">= 0.6.1 and < 1.0.0"},
       {:plug, "~> 1.0", only: :test},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
