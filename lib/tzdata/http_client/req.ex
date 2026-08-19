@@ -5,19 +5,9 @@ defmodule Tzdata.HTTPClient.Req do
 
   @impl true
   def get(url, headers, options) do
-    follow_redirect = Keyword.get(options, :follow_redirect, false)
-
-    req_options = [
-      headers: headers,
-      redirect: follow_redirect,
-      decode_body: false
-    ]
-
-    case Req.request([method: :get, url: url] ++ req_options) do
-      {:ok, %Req.Response{status: status, headers: response_headers, body: body}} ->
-        # Convert headers to list of tuples to match HTTPClient behavior
-        headers_list = Enum.map(response_headers, fn {k, v} -> {k, List.first(v) || v} end)
-        {:ok, {status, headers_list, body}}
+    case request(:get, url, headers, options) do
+      {:ok, %Req.Response{status: status, body: body} = response} ->
+        {:ok, {status, Req.get_headers_list(response), body}}
 
       {:error, reason} ->
         {:error, reason}
@@ -25,14 +15,28 @@ defmodule Tzdata.HTTPClient.Req do
   end
 
   @impl true
-  def head(url, headers, _options) do
-    case Req.request(method: :head, url: url, headers: headers) do
-      {:ok, %Req.Response{status: status, headers: response_headers}} ->
-        headers_list = Enum.map(response_headers, fn {k, v} -> {k, List.first(v) || v} end)
-        {:ok, {status, headers_list}}
+  def head(url, headers, options) do
+    case request(:head, url, headers, options) do
+      {:ok, %Req.Response{status: status} = response} ->
+        {:ok, {status, Req.get_headers_list(response)}}
 
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  defp request(method, url, headers, options) do
+    {follow_redirect, req_options} = Keyword.pop(options, :follow_redirect, false)
+
+    req_options =
+      Keyword.merge(req_options,
+        method: method,
+        url: url,
+        headers: headers,
+        redirect: follow_redirect,
+        decode_body: false
+      )
+
+    Req.request(req_options)
   end
 end

@@ -23,7 +23,7 @@ iex> Tzdata.tzdata_version
 
 ## Getting started
 
-To use the Tzdata library with Elixir 1.8+, add it to the dependencies in your mix file:
+To use the Tzdata library with Elixir 1.14+, add it to the dependencies in your mix file:
 
 ```elixir
 defp deps do
@@ -109,8 +109,8 @@ If you need to continue using Hackney, you can configure it explicitly:
 # mix.exs
 defp deps do
   [
-    {:tzdata, "~> 1.2"},
-    {:hackney, "~> 1.0"}
+    {:tzdata, github: "bglusman/tzdata"},
+    {:hackney, "~> 1.0 or ~> 4.0"}
   ]
 end
 
@@ -118,7 +118,7 @@ end
 config :tzdata, http_client: Tzdata.HTTPClient.Hackney
 ```
 
-Note: Hackney has known security vulnerabilities and is less actively maintained than Req/Finch.
+Hackney remains available for backward compatibility, but Req is the default HTTP client.
 
 ## Documentation
 

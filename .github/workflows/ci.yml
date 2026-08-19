@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - master
       - ci-test-ghwf
 
 jobs:
@@ -40,31 +40,6 @@ jobs:
       - name: Compile with --warnings-as-errors
         run: mix compile --warnings-as-errors
         if: ${{ matrix.lint }}
-
-      - name: Run tests
-        run: mix test
-
-  test_older_elixir:
-    runs-on: ubuntu-22.04
-    env:
-      MIX_ENV: test
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - pair:
-              elixir: 1.9.0
-              otp: 21.3.8
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: ${{ matrix.pair.otp }}
-          elixir-version: ${{ matrix.pair.elixir }}
-
-      - name: Install dependencies
-        run: mix do deps.get --only $MIX_ENV, deps.compile
 
       - name: Run tests
         run: mix test

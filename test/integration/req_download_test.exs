@@ -19,7 +19,8 @@ defmodule Tzdata.Integration.ReqDownloadTest do
         |> elem(1)
         |> String.to_integer()
 
-      assert content_length > 100_000  # Reasonable size for tzdata archive
+      # Reasonable size for tzdata archive
+      assert content_length > 100_000
     end
 
     test "can perform HEAD request to get last-modified header" do
@@ -39,7 +40,8 @@ defmodule Tzdata.Integration.ReqDownloadTest do
       assert {:ok, {status, _headers, body}} = ReqClient.get(@iana_url, [], [])
       assert status == 200
       assert is_binary(body)
-      assert byte_size(body) > 100_000  # Reasonable size for tzdata archive
+      # Reasonable size for tzdata archive
+      assert byte_size(body) > 100_000
 
       # Verify it's a gzip file
       assert binary_part(body, 0, 2) == <<0x1F, 0x8B>>
@@ -48,7 +50,7 @@ defmodule Tzdata.Integration.ReqDownloadTest do
     test "handles follow_redirect option correctly" do
       # Test with a URL that redirects (if IANA uses redirects)
       assert {:ok, {status, _headers, body}} =
-        ReqClient.get(@iana_url, [], [follow_redirect: true])
+               ReqClient.get(@iana_url, [], follow_redirect: true)
 
       assert status == 200
       assert is_binary(body)
@@ -59,7 +61,7 @@ defmodule Tzdata.Integration.ReqDownloadTest do
       custom_headers = [{"User-Agent", "tzdata-test"}]
 
       assert {:ok, {status, _headers, body}} =
-        ReqClient.get(@iana_url, custom_headers, [])
+               ReqClient.get(@iana_url, custom_headers, [])
 
       assert status == 200
       assert is_binary(body)
