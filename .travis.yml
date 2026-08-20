@@ -1,10 +1,8 @@
-# Use Elixir master instead of a release in order to test Elixir 1.8 functionality
-
 language: elixir
 elixir:
-  - 1.8.1
+  - 1.15.8
 otp_release:
-  - 21.0
+  - 26.2
 env:
   - MIX_ENV=test
 script:

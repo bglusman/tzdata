@@ -8,7 +8,7 @@ defmodule Tzdata.Mixfile do
       app: :tzdata,
       name: "tzdata",
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.15",
       package: package(),
       description: description(),
       deps: deps(),
@@ -27,7 +27,8 @@ defmodule Tzdata.Mixfile do
 
   defp deps do
     [
-      {:hackney, "~> 1.17"},
+      {:req, ">= 0.6.1 and < 1.0.0"},
+      {:plug, "~> 1.0", only: :test},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
@@ -44,7 +45,7 @@ defmodule Tzdata.Mixfile do
     [
       autoupdate: :enabled,
       data_dir: nil,
-      http_client: Tzdata.HTTPClient.Hackney
+      http_client: Tzdata.HTTPClient.Req
     ]
   end
 
